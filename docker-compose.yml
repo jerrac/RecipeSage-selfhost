@@ -63,7 +63,7 @@ services:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=recipesage_selfhost
     volumes:
-      - elasticsearchdata:/usr/share/elasticsearch/data
+      - ./elasticsearchdata:/usr/share/elasticsearch/data
     restart: unless-stopped
   pushpin:
     image: fanout/pushpin:1.27.0
@@ -77,7 +77,7 @@ services:
       - POSTGRES_USER=recipesage_selfhost
       - POSTGRES_PASSWORD=recipesage_selfhost
     volumes:
-      - postgresdata:/var/lib/postgresql/data
+      - ./postgresdata:/var/lib/postgresql/data
     restart: unless-stopped
   browserless:
     image: browserless/chrome:1.28.0-chrome-stable
@@ -97,7 +97,7 @@ services:
       - MINIO_ACCESS_KEY=AKIAIOSFODNN7EXAMPLE
       - MINIO_SECRET_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
     volumes:
-      - miniodata:/data
+      - ./miniodata:/data
     command: server /data
     restart: unless-stopped
   create-minio-buckets:
@@ -112,10 +112,4 @@ services:
       /usr/bin/mc policy set public myminio/recipesage-selfhost;
       exit 0;
       "
-volumes:
-  elasticsearchdata:
-    driver: local
-  postgresdata:
-    driver: local
-  miniodata:
-    driver: local
+
