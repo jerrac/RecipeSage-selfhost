@@ -5,7 +5,7 @@ services:
     volumes:
     - ./proxy.conf:/etc/nginx/conf.d/default.conf
     ports:
-    - 10003:80
+    - 10013:80
     depends_on:
       - static
       - api
