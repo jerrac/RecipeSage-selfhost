@@ -11,6 +11,9 @@ services:
       - api
       - pushpin
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -19,6 +22,9 @@ services:
   static:
     image: julianpoy/recipesage-selfhost:static-latest
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
   api:
     image: julianpoy/recipesage-selfhost:api-latest
     depends_on:
@@ -62,6 +68,9 @@ services:
       - BROWSERLESS_PORT=3000
       - INGREDIENT_INSTRUCTION_CLASSIFIER_URL=http://ingredient-instruction-classifier:3000/
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
     environment:
@@ -70,11 +79,17 @@ services:
     volumes:
       - elasticsearchdata:/usr/share/elasticsearch/data
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
   pushpin:
     image: fanout/pushpin:1.27.0
     environment:
       - target=api:3000
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
   postgres:
     image: postgres
     environment:
@@ -84,18 +99,27 @@ services:
     volumes:
       - postgresdata:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
   browserless:
     image: browserless/chrome:1.28.0-chrome-stable
     environment:
       - MAX_CONCURRENT_SESSIONS=3
       - MAX_QUEUE_LENGTH=10
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
   ingredient-instruction-classifier:
     image: julianpoy/ingredient-instruction-classifier:latest
     environment:
       - SENTENCE_EMBEDDING_BATCH_SIZE=200
       - PREDICTION_CONCURRENCY=4
     restart: unless-stopped
+    networks:
+      - sagenet
+      - proxy
   minio:
     image: minio/minio
     environment:
@@ -117,6 +141,9 @@ services:
       /usr/bin/mc policy set public myminio/recipesage-selfhost;
       exit 0;
       "
+    networks:
+      - sagenet
+      - proxy
 volumes:
   elasticsearchdata:
     driver: local
@@ -124,3 +151,8 @@ volumes:
     driver: local
   miniodata:
     driver: local
+
+networks:
+  sagenet:
+  proxy:
+    external: True
