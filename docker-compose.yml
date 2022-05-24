@@ -34,11 +34,11 @@ services:
       - browserless
     command: /app/www
     environment:
-      - AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-      - AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_REGION=us-west-2
-      - AWS_BUCKET=recipesage-selfhost
-      - AWS_ENDPOINT=http://minio:9000/ # Needed for minio, remove for s3 - should be the internal container address to minio
+      - AWS_BUCKET=testrecipesage
+      - AWS_ENDPOINT=${AWS_ENDPOINT}
       - AWS_S3_PUBLIC_PATH=/minio/recipesage-selfhost/ # Needed for minio, remove for s3 - should be a public facing address/path directed to minio (by default nginx proxy handles)
       - AWS_S3_FORCE_PATH_STYLE=true # Needed for minio, remove for s3
       - AWS_S3_SIGNATURE_VERSION=v4 # Needed for minio, remove for s3
